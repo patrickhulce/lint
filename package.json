@@ -2,7 +2,7 @@
   "name": "@patritech/lint",
   "version": "0.0.0",
   "description": "Lints JavaScript.",
-  "main": "./lib/index.js",
+  "main": "./bin/lint.js",
   "scripts": {
     "test": "npm run test:unit",
     "test:unit": "mocha --reporter spec --require test/bootstrap 'test/**/*.test.js'",
