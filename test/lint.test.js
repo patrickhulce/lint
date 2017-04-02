@@ -87,10 +87,10 @@ describe('bin/lint.js', () => {
   }
 
   context('node', () => {
-    describe('default', () => {
-      before(done => setup('fixtures/node', [], done))
-      after(teardown)
+    before(done => setup('fixtures/node', ['--fix'], done))
+    after(teardown)
 
+    describe('linting', () => {
       it('should exit with error code', () => {
         expect(results.code).to.equal(1)
       })
@@ -110,54 +110,45 @@ describe('bin/lint.js', () => {
       it('should find errors in bin/', () => {
         expect(results.files).to.contain('bin/file.js')
       })
-
-      it('should not fix errors', () => {
-        const original = readFile('fixtures/node', 'lib/file.js')
-        const output = readFile(tmpDir.name, 'lib/file.js')
-        expect(original).to.equal(output)
-      })
     })
 
     describe('--fix', () => {
-      before(done => setup('fixtures/node', ['--fix'], done))
-      after(done => teardown(done, 'fixtures/node-actual'))
-
       it('should fix errors', () => {
         const original = readFile('fixtures/node-expected', 'lib/file.js')
         const output = readFile(tmpDir.name, 'lib/file.js')
         expect(original).to.equal(output)
       })
     })
+  })
 
-    describe('package.json overrides', () => {
-      function beforeLint() {
-        fs.writeFileSync(path.join(tmpDir.name, 'package.json'), JSON.stringify({
-          config: {
-            eslint: {
-              envs: ['browser'],
-              globals: ['__DEV__'],
-              rules: {'no-console': 'off'},
-            }
+  describe('package.json overrides', () => {
+    function beforeLint() {
+      fs.writeFileSync(path.join(tmpDir.name, 'package.json'), JSON.stringify({
+        config: {
+          eslint: {
+            envs: ['browser'],
+            globals: ['__DEV__'],
+            rules: {'no-console': 'off'},
           }
-        }, null, 2), 'utf-8')
-      }
+        }
+      }, null, 2), 'utf-8')
+    }
 
-      before(done => setup('fixtures/node-overrides', [], beforeLint, done))
-      after(teardown)
+    before(done => setup('fixtures/node-overrides', [], beforeLint, done))
+    after(teardown)
 
-      it('should still lint', () => {
-        expect(results.byFile).to.have.property('file.js')
-        const violations = results.byFile['file.js'].rules
-        expect(violations).to.contain('Extra semicolon')
-      })
+    it('should still lint', () => {
+      expect(results.byFile).to.have.property('file.js')
+      const violations = results.byFile['file.js'].rules
+      expect(violations).to.contain('Extra semicolon')
+    })
 
-      it('should respect overrides', () => {
-        expect(results.byFile).to.have.property('file.js')
-        const violations = results.byFile['file.js'].rules
-        expect(violations).to.not.contain('document is not defined')
-        expect(violations).to.not.contain('__DEV__ is not defined')
-        expect(violations).to.not.contain('Unexpected console')
-      })
+    it('should respect overrides', () => {
+      expect(results.byFile).to.have.property('file.js')
+      const violations = results.byFile['file.js'].rules
+      expect(violations).to.not.contain('document is not defined')
+      expect(violations).to.not.contain('__DEV__ is not defined')
+      expect(violations).to.not.contain('Unexpected console')
     })
   })
 
@@ -165,7 +156,7 @@ describe('bin/lint.js', () => {
     before(done => setup('fixtures/react', ['-t', 'react', '--fix'], done))
     after(done => teardown(done, 'fixtures/react-actual'))
 
-    describe('default', () => {
+    describe('linting', () => {
       it('should find react-specific errors', () => {
         expect(results.byFile).to.have.property('file.js')
         const violations = results.byFile['file.js'].rules
