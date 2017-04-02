@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "babel-eslint": "^7.2.1",
+    "debug": "^2.6.3",
     "eslint": "^3.19.0",
     "eslint-formatter-pretty": "^1.1.0",
     "eslint-import-resolver-webpack": "^0.8.1",
