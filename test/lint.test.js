@@ -95,6 +95,10 @@ describe('bin/lint.js', () => {
         expect(results.code).to.equal(1)
       })
 
+      it('should find errors in ./', () => {
+        expect(results.files).to.contain('toplevel.js')
+      })
+
       it('should find errors in lib/', () => {
         expect(results.files).to.contain('lib/file.js')
       })
@@ -153,6 +157,35 @@ describe('bin/lint.js', () => {
         expect(violations).to.not.contain('document is not defined')
         expect(violations).to.not.contain('__DEV__ is not defined')
         expect(violations).to.not.contain('Unexpected console')
+      })
+    })
+  })
+
+  context('react', () => {
+    before(done => setup('fixtures/react', ['-t', 'react', '--fix'], done))
+    after(done => teardown(done, 'fixtures/react-actual'))
+
+    describe('default', () => {
+      it('should find react-specific errors', () => {
+        expect(results.byFile).to.have.property('file.js')
+        const violations = results.byFile['file.js'].rules
+        expect(violations).to.contain('prop is never used')
+        expect(violations).to.contain('key must begin with handle')
+        expect(violations).to.contain('Link is not defined')
+      })
+
+      it('should use webpack resolution', () => {
+        expect(results.byFile).to.have.property('file.js')
+        const violations = results.byFile['file.js'].rules
+        expect(violations).to.not.contain('Unable to resolve path to module src/dep2')
+      })
+    })
+
+    describe('--fix', () => {
+      it('should fix errors', () => {
+        const original = readFile('fixtures/react-expected', 'file.js')
+        const output = readFile(tmpDir.name, 'file.js')
+        expect(original).to.equal(output)
       })
     })
   })

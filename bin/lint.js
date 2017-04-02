@@ -4,10 +4,16 @@ const formatter = require('eslint-formatter-pretty')
 const lint = require('../lib/lint.js')
 
 const argv = yargs
-  .usage('Usage: $0 [--fix] [path]')
+  .usage('Usage: $0 [options] [path]')
   .option('fix', {
     describe: 'auto-fix options',
     type: 'boolean',
+  })
+  .option('type', {
+    describe: 'type of code',
+    alias: 't',
+    choices: ['node', 'react'],
+    default: 'node',
   })
   .argv
 

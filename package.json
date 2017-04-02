@@ -4,6 +4,8 @@
   "description": "Lints JavaScript.",
   "main": "./lib/lint.js",
   "scripts": {
+    "update-node-expectations": "rm -fR test/fixtures/node-expected && mv test/fixtures/node-actual test/fixtures/node-expected",
+    "update-react-expectations": "rm -fR test/fixtures/react-expected && mv test/fixtures/react-actual test/fixtures/react-expected",
     "test": "npm run test:unit && npm run test:lint",
     "test:unit": "mocha --reporter spec --require test/bootstrap 'test/**/*.test.js'",
     "test:lint": "./bin/lint.js",
@@ -44,12 +46,12 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "cz-conventional-changelog": "^2.0.0",
-    "diff": "^3.2.0",
     "execa": "^0.6.3",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "ncp": "^2.0.0",
     "semantic-release": "^6.3.2",
-    "tmp": "^0.0.31"
+    "tmp": "^0.0.31",
+    "webpack": "^2.3.2"
   }
 }
