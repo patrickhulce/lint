@@ -1,5 +1,5 @@
 {
-  "name": "@patrickhulce/lint",
+  "name": "@patritech/lint",
   "version": "0.0.0",
   "description": "Lints JavaScript.",
   "main": "./lib/index.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/patrickhulce/lint.git"
+    "url": "https://github.com/patritech/lint.git"
   },
   "author": "Patrick Hulce <patrick.hulce@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/patrickhulce/lint/issues"
+    "url": "https://github.com/patritech/lint/issues"
   },
-  "homepage": "https://github.com/patrickhulce/lint#readme",
+  "homepage": "https://github.com/patritech/lint#readme",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
