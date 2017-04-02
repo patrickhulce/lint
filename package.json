@@ -1,0 +1,54 @@
+{
+  "name": "@patrickhulce/lint",
+  "version": "0.0.0",
+  "description": "Lints JavaScript.",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "npm run test:unit",
+    "test:unit": "mocha --reporter spec --require test/bootstrap 'test/**/*.test.js'",
+    "test:lint": "./bin/lint.js",
+    "test:watch": "mocha --watch --reporter dot --require test/bootstrap 'test/**/*.test.js'",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "bin": {
+    "lint": "./bin/lint.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patrickhulce/lint.git"
+  },
+  "author": "Patrick Hulce <patrick.hulce@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/patrickhulce/lint/issues"
+  },
+  "homepage": "https://github.com/patrickhulce/lint#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "babel-eslint": "^7.2.1",
+    "eslint": "^3.19.0",
+    "eslint-formatter-pretty": "^1.1.0",
+    "eslint-import-resolver-webpack": "^0.8.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^6.10.3",
+    "eslint-plugin-unicorn": "^2.1.1",
+    "lodash": "^4.17.4",
+    "yargs": "^7.0.2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "cz-conventional-changelog": "^2.0.0",
+    "diff": "^3.2.0",
+    "execa": "^0.6.3",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "ncp": "^2.0.0",
+    "semantic-release": "^6.3.2",
+    "tmp": "^0.0.31"
+  }
+}
