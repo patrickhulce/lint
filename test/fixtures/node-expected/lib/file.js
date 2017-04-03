@@ -9,3 +9,6 @@ const myList = ['something',
   'else', {
     a: 'string',
   }]
+
+const url = 'https://i-am-a-super-super-super-super-super-super-super-super-super-super-super-super-super-long-url.com/'
+const otherVeryVeryVeryVeryVeryVeryVeryLongLine = 'how do you think it will work'
