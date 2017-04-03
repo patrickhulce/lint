@@ -17,6 +17,7 @@ const argv = yargs
   })
   .argv
 
-const report = lint(argv)
+const paths = argv._.length ? argv._ : ['./+(lib|bin|src)/**/*.js', './*.js']
+const report = lint(paths, argv)
 process.stdout.write(formatter(report.results))
 process.exit(report.errorCount === 0 ? 0 : 1)
