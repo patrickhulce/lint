@@ -26,7 +26,6 @@ describe('bin/lint.js', () => {
       .trim()
 
     if (!content.match(FILE_REGEX)) {
-      console.log(result)
       return {files: [], byFile: {}}
     }
 
