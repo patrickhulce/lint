@@ -7,9 +7,8 @@
     "update-node-expectations": "rm -fR test/fixtures/node-expected && mv test/fixtures/node-actual test/fixtures/node-expected",
     "update-react-expectations": "rm -fR test/fixtures/react-expected && mv test/fixtures/react-actual test/fixtures/react-expected",
     "test": "npm run test:unit && npm run test:lint",
-    "test:unit": "mocha --reporter spec --require test/bootstrap 'test/**/*.test.js'",
+    "test:unit": "mocha --reporter spec --require test/bootstrap test/lint.test.js",
     "test:lint": "./bin/lint.js",
-    "test:watch": "mocha --watch --reporter dot --require test/bootstrap 'test/**/*.test.js'",
     "semantic-release": "semantic-release pre && npm publish --access public && semantic-release post"
   },
   "bin": {

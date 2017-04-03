@@ -10,8 +10,7 @@ const FILE_REGEX = /\s*(\S*\.js):\d+:\d+/
 const FILE_REGEX_GLOBAL = /\s*(\S*\.js):\d+:\d+/g
 
 describe('bin/lint.js', () => {
-  let tmpDir
-  let results
+  let tmpDir, results
 
   function readFile(dir, file) {
     dir = dir === tmpDir.name ? dir : path.join(__dirname, dir)
@@ -44,10 +43,6 @@ describe('bin/lint.js', () => {
     return {files, byFile: _.keyBy(fileResults, 'file')}
   }
 
-  function diffDirectories(dirA, dirB) {
-
-  }
-
   function setup(dir, args, beforeLint, done) {
     if (arguments.length === 3) {
       done = beforeLint
@@ -62,9 +57,10 @@ describe('bin/lint.js', () => {
 
       beforeLint()
       execa(path.join(__dirname, '../bin/lint.js'), args, {cwd: tmpDir.name})
-        .catch(result => result)
+        .catch(err => err)
         .then(result => results = Object.assign(result, parseResult(result)))
         .then(() => done())
+        .catch(done)
     })
   }
 
@@ -87,9 +83,9 @@ describe('bin/lint.js', () => {
 
   context('node', () => {
     before(done => setup('fixtures/node', ['--fix'], done))
-    after(teardown)
+    after(done => teardown(done, 'fixtures/node-actual'))
 
-    describe('linting', () => {
+    describe('source linting', () => {
       it('should exit with error code', () => {
         expect(results.code).to.equal(1)
       })
@@ -108,6 +104,26 @@ describe('bin/lint.js', () => {
 
       it('should find errors in bin/', () => {
         expect(results.files).to.contain('bin/file.js')
+      })
+
+      it('should use source config', () => {
+        expect(results.byFile).to.have.property('lib/file.js')
+        const violations = results.byFile['lib/file.js'].rules
+        expect(violations).to.contain('it is not defined')
+        expect(violations).to.contain('no-unused-expressions')
+      })
+    })
+
+    describe('test linting', () => {
+      it('should find errors in test/', () => {
+        expect(results.files).to.contain('test/file.test.js')
+      })
+
+      it('should use test config', () => {
+        expect(results.byFile).to.have.property('test/file.test.js')
+        const violations = results.byFile['test/file.test.js'].rules
+        expect(violations).to.not.contain('it is not defined')
+        expect(violations).to.not.contain('no-unused-expressions')
       })
     })
 
@@ -128,8 +144,8 @@ describe('bin/lint.js', () => {
             envs: ['browser'],
             globals: ['__DEV__'],
             rules: {'no-console': 'off'},
-          }
-        }
+          },
+        },
       }, null, 2), 'utf-8')
     }
 

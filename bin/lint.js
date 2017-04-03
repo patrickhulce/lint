@@ -12,12 +12,29 @@ const argv = yargs
   .option('type', {
     describe: 'type of code',
     alias: 't',
-    choices: ['node', 'react'],
+    choices: ['node', 'react', 'test'],
     default: 'node',
   })
   .argv
 
-const paths = argv._.length ? argv._ : ['./+(lib|bin|src)/**/*.js', './*.js']
-const report = lint(paths, argv)
-process.stdout.write(formatter(report.results))
-process.exit(report.errorCount === 0 ? 0 : 1)
+function run(paths, options) {
+  const report = lint(paths, options)
+  process.stdout.write(formatter(report.results))
+  return report.errorCount === 0
+}
+
+function exit(passed) {
+  process.exit(passed ? 0 : 1)
+}
+
+if (argv._.length) {
+  exit(run(argv._, argv))
+} else {
+  const srcOpts = Object.assign({}, argv, {ignore: '**/*.test.js'})
+  const srcPassed = run(['./+(lib|bin|src)/**/*.js', './*.js'], srcOpts)
+
+  const testOpts = Object.assign({}, argv, {type: 'test', ignore: '**/fixtures/**/*.test.js'})
+  const testPassed = run(['./+(lib|bin|src|test)/**/*.test.js'], testOpts)
+  exit(srcPassed && testPassed)
+}
+
