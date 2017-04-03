@@ -27,3 +27,5 @@ export default React.createClass({
     extDep()
   },
 })
+
+document.body.appendChild(localStorage.setItem(''))

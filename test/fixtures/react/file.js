@@ -26,3 +26,6 @@ render2() {
   extDep()
 },
 })
+
+
+document.body.appendChild(localStorage.setItem(''))

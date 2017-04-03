@@ -172,6 +172,13 @@ describe('bin/lint.js', () => {
     after(done => teardown(done, 'fixtures/react-actual'))
 
     describe('linting', () => {
+      it('should use browser env', () => {
+        expect(results.byFile).to.have.property('file.js')
+        const violations = results.byFile['file.js'].rules
+        expect(violations).to.not.contain('document is not defined')
+        expect(violations).to.not.contain('localStorage is not defined')
+      })
+
       it('should find react-specific errors', () => {
         expect(results.byFile).to.have.property('file.js')
         const violations = results.byFile['file.js'].rules
