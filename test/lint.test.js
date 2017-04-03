@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const glob = require('glob')
 
 const _ = require('lodash')
 const execa = require('execa')
@@ -12,9 +13,21 @@ const FILE_REGEX_GLOBAL = /\s*(\S*\.js):\d+:\d+/g
 describe('bin/lint.js', () => {
   let tmpDir, results
 
-  function readFile(dir, file) {
-    dir = dir === tmpDir.name ? dir : path.join(__dirname, dir)
-    return fs.readFileSync(path.join(dir, file), 'utf-8')
+  function getFullPath(dir) {
+    return dir === tmpDir.name ? dir : path.join(__dirname, dir)
+  }
+
+  function diffDirectories(dirA, dirB) {
+    dirA = getFullPath(dirA)
+    dirB = getFullPath(dirB)
+    const filesA = glob.sync(path.join(dirA, '**/*.js')).sort()
+    const filesB = glob.sync(path.join(dirB, '**/*.js')).sort()
+    expect(filesA).to.have.length(filesB.length)
+    filesA.forEach((fileA, index) => {
+      const contentA = fs.readFileSync(fileA, 'utf8')
+      const contentB = fs.readFileSync(filesB[index], 'utf8')
+      expect(contentA).to.equal(contentB)
+    })
   }
 
   function parseResult(result) {
@@ -129,9 +142,7 @@ describe('bin/lint.js', () => {
 
     describe('--fix', () => {
       it('should fix errors', () => {
-        const original = readFile('fixtures/node-expected', 'lib/file.js')
-        const output = readFile(tmpDir.name, 'lib/file.js')
-        expect(original).to.equal(output)
+        diffDirectories(tmpDir.name, 'fixtures/node-expected')
       })
     })
   })
@@ -196,9 +207,7 @@ describe('bin/lint.js', () => {
 
     describe('--fix', () => {
       it('should fix errors', () => {
-        const original = readFile('fixtures/react-expected', 'file.js')
-        const output = readFile(tmpDir.name, 'file.js')
-        expect(original).to.equal(output)
+        diffDirectories(tmpDir.name, 'fixtures/react-expected')
       })
     })
   })

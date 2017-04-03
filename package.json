@@ -46,6 +46,7 @@
     "chai": "^3.5.0",
     "cz-conventional-changelog": "^2.0.0",
     "execa": "^0.6.3",
+    "glob": "^7.1.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "ncp": "^2.0.0",
