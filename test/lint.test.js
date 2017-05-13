@@ -95,7 +95,7 @@ describe('bin/lint.js', () => {
   }
 
   context('node', () => {
-    before(done => setup('fixtures/node', ['--fix'], done))
+    before(done => setup('fixtures/node', ['--fix', '--write'], done))
     after(done => teardown(done, 'fixtures/node-actual'))
 
     describe('source linting', () => {
@@ -143,6 +143,17 @@ describe('bin/lint.js', () => {
     describe('--fix', () => {
       it('should fix errors', () => {
         diffDirectories(tmpDir.name, 'fixtures/node-expected')
+      })
+    })
+
+    describe('--write', () => {
+      it('should write a .eslintrc file', () => {
+        const filePath = path.join(tmpDir.name, '.eslintrc')
+        const fileContents = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+        expect(fileContents).to.be.ok
+        expect(fileContents).to.have.property('env')
+        expect(fileContents).to.have.property('parser')
+        expect(fileContents).to.have.property('rules')
       })
     })
   })

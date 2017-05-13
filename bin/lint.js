@@ -16,6 +16,10 @@ const argv = yargs
     choices: ['node', 'react', 'test', 'typescript'],
     default: 'node',
   })
+  .option('write', {
+    describe: 'write out the config',
+    type: 'boolean',
+  })
   .argv
 
 function run(paths, options) {
@@ -41,10 +45,12 @@ if (argv._.length) {
   const runFunc = argv.type === 'typescript' ? tsrun : run
   exit(runFunc(argv._, argv))
 } else {
-  const srcOpts = Object.assign({}, argv, {ignore: '**/*.test.js'})
+  const srcIgnore = '**/*.test.js'
+  const srcOpts = Object.assign({}, argv, {ignore: srcIgnore})
   const srcPassed = run(['./+(lib|bin|src)/**/*.js', './*.js'], srcOpts)
 
-  const testOpts = Object.assign({}, argv, {type: 'test', ignore: '**/fixtures/**/*.test.js'})
+  const testIgnore = '**/fixtures/**/*.test.js'
+  const testOpts = Object.assign({}, argv, {type: 'test', write: false, ignore: testIgnore})
   const testPassed = run(['./+(lib|bin|src|test)/**/*.test.js'], testOpts)
 
   const tsOpts = Object.assign({}, argv)
