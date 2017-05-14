@@ -57,7 +57,8 @@ if (argv._.length) {
   const testOpts = Object.assign({}, argv, {type: 'test', write: false, ignore: testIgnore})
   const testPassed = run(['./+(lib|bin|src|test)/**/*.test.js'], testOpts)
 
-  const tsOpts = Object.assign({}, argv)
+  const tsIgnore = '**/*.d.ts'
+  const tsOpts = Object.assign({}, argv, {ignore: tsIgnore})
   const tsPassed = tsrun(['./+(lib|bin|src)/**/*.ts'], tsOpts)
 
   exit(srcPassed && testPassed && tsPassed)
