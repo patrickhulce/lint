@@ -34,6 +34,10 @@ function tsrun(paths, options) {
     process.stdout.write(results.stdout)
   }
 
+  if (results.stderr && results.stderr.length) {
+    process.stderr.write(results.stderr)
+  }
+
   return results.status === 0
 }
 

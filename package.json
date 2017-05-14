@@ -42,9 +42,6 @@
     "lodash": "^4.17.4",
     "yargs": "^7.0.2"
   },
-  "optionalDependencies": {
-    "tslint": "^5.2.0"
-  },
   "devDependencies": {
     "chai": "^3.5.0",
     "cz-conventional-changelog": "^2.0.0",
