@@ -41,17 +41,14 @@ describe('bin/lint.js', () => {
       return {content, files: [], byFile: {}}
     }
 
-    const files = content
-      .match(FILE_REGEX_GLOBAL)
-      .map(item => item.match(FILE_REGEX)[1])
-    const fileResults = files
-      .map((file, index) => {
-        const start = content.indexOf(file) + file.length
-        let end = content.indexOf(files[index + 1])
-        end = end === -1 ? undefined : end
-        const rules = content.slice(start, end)
-        return {file, rules}
-      })
+    const files = content.match(FILE_REGEX_GLOBAL).map(item => item.match(FILE_REGEX)[1])
+    const fileResults = files.map((file, index) => {
+      const start = content.indexOf(file) + file.length
+      let end = content.indexOf(files[index + 1])
+      end = end === -1 ? undefined : end
+      const rules = content.slice(start, end)
+      return {file, rules}
+    })
 
     return {content, files, byFile: _.keyBy(fileResults, 'file')}
   }
@@ -164,15 +161,23 @@ describe('bin/lint.js', () => {
 
   describe('package.json overrides', () => {
     function beforeLint() {
-      fs.writeFileSync(path.join(tmpDir.name, 'package.json'), JSON.stringify({
-        config: {
-          eslint: {
-            envs: ['browser'],
-            globals: ['__DEV__'],
-            rules: {'no-console': 'off'},
+      fs.writeFileSync(
+        path.join(tmpDir.name, 'package.json'),
+        JSON.stringify(
+          {
+            config: {
+              eslint: {
+                envs: ['browser'],
+                globals: ['__DEV__'],
+                rules: {'no-console': 'off'},
+              },
+            },
           },
-        },
-      }, null, 2), 'utf-8')
+          null,
+          2
+        ),
+        'utf-8'
+      )
     }
 
     before(done => setup('fixtures/node-overrides', [], beforeLint, done))
