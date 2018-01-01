@@ -29,6 +29,10 @@ const argv = yargs
     describe: 'write out the config',
     type: 'boolean',
   })
+  .option('ignore', {
+    describe: 'patterns of files to ignore',
+    type: 'array',
+  })
   .argv
 
 function prettifyIfNecessary(paths, options) {
@@ -85,15 +89,15 @@ if (argv._.length) {
   const runFunc = argv.type === 'typescript' ? tsrun : run
   exit(runFunc(argv._, argv))
 } else {
-  const srcIgnore = '**/*.test.js'
+  const srcIgnore = ['**/*.test.js'].concat(argv.ignore)
   const srcOpts = Object.assign({}, argv, {ignore: srcIgnore})
   const srcPassed = run(['./+(lib|bin|src)/**/*.js', './*.js'], srcOpts)
 
-  const testIgnore = '**/fixtures/**/*.test.js'
+  const testIgnore = ['**/fixtures/**/*.test.js'].concat(argv.ignore)
   const testOpts = Object.assign({}, argv, {type: 'test', write: false, ignore: testIgnore})
   const testPassed = run(['./+(lib|bin|src|test)/**/*.test.js'], testOpts)
 
-  const tsIgnore = '**/*.d.ts'
+  const tsIgnore = ['**/*.d.ts'].concat(argv.ignore)
   const tsOpts = Object.assign({}, argv, {ignore: tsIgnore})
   const tsPassed = tsrun(['./+(lib|bin|src)/**/*.ts'], tsOpts)
 

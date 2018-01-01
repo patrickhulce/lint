@@ -26,7 +26,7 @@ describe('bin/lint.js', () => {
     filesA.forEach((fileA, index) => {
       const contentA = fs.readFileSync(fileA, 'utf8')
       const contentB = fs.readFileSync(filesB[index], 'utf8')
-      expect(contentA).to.equal(contentB)
+      expect(contentA).to.equal(contentB, `${fileA} did not have correct content`)
     })
   }
 
@@ -95,7 +95,7 @@ describe('bin/lint.js', () => {
   }
 
   context('node', () => {
-    before(done => setup('fixtures/node', ['--fix', '--write'], done))
+    before(done => setup('fixtures/node', ['--fix', '--write', '--ignore', '*-ignored.js'], done))
     after(done => teardown(done, 'fixtures/node-actual'))
 
     describe('source linting', () => {
@@ -117,6 +117,10 @@ describe('bin/lint.js', () => {
 
       it('should find errors in bin/', () => {
         expect(results.files).to.contain('bin/file.js')
+      })
+
+      it('should not find errors in ignored files', () => {
+        expect(results.files).to.not.contain('src/file-ignored.js')
       })
 
       it('should use source config', () => {
