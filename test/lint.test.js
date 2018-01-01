@@ -38,7 +38,7 @@ describe('bin/lint.js', () => {
       .trim()
 
     if (!content.match(FILE_REGEX)) {
-      return {files: [], byFile: {}}
+      return {content, files: [], byFile: {}}
     }
 
     const files = content
@@ -53,7 +53,7 @@ describe('bin/lint.js', () => {
         return {file, rules}
       })
 
-    return {files, byFile: _.keyBy(fileResults, 'file')}
+    return {content, files, byFile: _.keyBy(fileResults, 'file')}
   }
 
   function setup(dir, args, beforeLint, done) {
@@ -177,6 +177,10 @@ describe('bin/lint.js', () => {
 
     before(done => setup('fixtures/node-overrides', [], beforeLint, done))
     after(teardown)
+
+    it('should still prettier lint', () => {
+      expect(results.content).to.contain('were not pretty')
+    })
 
     it('should still lint', () => {
       expect(results.byFile).to.have.property('file.js')

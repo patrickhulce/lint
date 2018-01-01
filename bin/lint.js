@@ -32,43 +32,71 @@ const argv = yargs
   .option('ignore', {
     describe: 'patterns of files to ignore',
     type: 'array',
-  })
-  .argv
+  }).argv
 
 function prettifyIfNecessary(paths, options) {
-  if (!options.fix || !options.prettify) {
-    return
+  if (!options.prettify) {
+    return true
   }
 
   const results = prettier(paths, options)
+  const stdout = results.stdout.toString()
   if (results.status === 0) {
-    const stdout = results.stdout.toString()
     const filesProcessed = stdout
       .split('\n')
       .map(s => s.match(/(.*) \d+ms$/))
       .filter(Boolean)
       .map(parts => parts[1])
-    for (const file of filesProcessed) {
-      process.stdout.write(`- ${file}\n`)
+    if (!filesProcessed.length) {
+      return true
     }
 
-    process.stdout.write(`✅  ${filesProcessed.length} files prettified\n\n`)
-  } else if (results.status === 2) {
-    log('no matching files detected for prettifying')
+    for (const file of filesProcessed) {
+      process.stdout.write(`  - ${file}\n`)
+    }
+
+    process.stdout.write(`  ✅  ${filesProcessed.length} files prettified\n\n`)
+    return true
+  } else if (results.status === 1) {
+    const files = stdout
+      .split('\n')
+      .map(s => s && s.trim())
+      .filter(Boolean)
+    if (!files.length) {
+      return true
+    }
+
+    for (const file of files) {
+      process.stdout.write(`  - ${file}\n`)
+    }
+    process.stdout.write(`  ✖  ${files.length} files were not pretty\n\n`)
+    return false
   } else {
-    log(results.stderr.toString())
+    const stderr = results.stderr.toString()
+    const isKnownError = /No matching files/.test(stderr)
+    if (isKnownError) {
+      log('prettier', {stdout, stderr})
+      return true
+    } else {
+      process.stdout.write(stdout)
+      process.stderr.write(stderr)
+      return false
+    }
   }
 }
 
 function run(paths, options) {
-  prettifyIfNecessary(paths, options)
+  const wasAlreadyPretty = prettifyIfNecessary(paths, options)
   const report = lint(paths, options)
   process.stdout.write(formatter(report.results))
-  return report.errorCount === 0
+  return wasAlreadyPretty && report.errorCount === 0
 }
 
 function tsrun(paths, options) {
-  prettifyIfNecessary(paths, Object.assign({prettierParser: 'typescript'}, options))
+  const wasAlreadyPretty = prettifyIfNecessary(
+    paths,
+    Object.assign({prettierParser: 'typescript'}, options)
+  )
   const results = tslint(paths, options)
   if (results.status !== 0 && results.stdout) {
     process.stdout.write(results.stdout)
@@ -78,7 +106,7 @@ function tsrun(paths, options) {
     process.stderr.write(results.stderr)
   }
 
-  return results.status === 0
+  return wasAlreadyPretty && results.status === 0
 }
 
 function exit(passed) {
@@ -103,4 +131,3 @@ if (argv._.length) {
 
   exit(srcPassed && testPassed && tsPassed)
 }
-
