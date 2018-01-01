@@ -68,7 +68,7 @@ function run(paths, options) {
 }
 
 function tsrun(paths, options) {
-  prettifyIfNecessary(paths, options)
+  prettifyIfNecessary(paths, Object.assign({prettierParser: 'typescript'}, options))
   const results = tslint(paths, options)
   if (results.status !== 0 && results.stdout) {
     process.stdout.write(results.stdout)
