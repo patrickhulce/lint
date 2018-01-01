@@ -5,10 +5,19 @@ path.should.have.been.called
 
 it('should work')
 
-const myList = ['something',
-  'else', {
+const myList = [
+  'something',
+  'else',
+  {
     a: 'string',
-  }]
+  },
+]
 
-const url = 'https://i-am-a-super-super-super-super-super-super-super-super-super-super-super-super-super-long-url.com/'
 const otherVeryVeryVeryVeryVeryVeryVeryLongLine = 'how do you think it will work'
+
+aSuperLongFunctionNameWithSomeCoolThings(
+  aSuperLongVariableName1,
+  aSuperLongVariableName2,
+  aSuperLongVariablceName3,
+  aSuperLongVariableName4
+)

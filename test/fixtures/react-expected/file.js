@@ -8,7 +8,7 @@ export default React.createClass({
     children: PropTypes.element,
     unused: PropTypes.number,
   },
-  renderOther() {
+  renderOtherSuperDuperExtraFrickinExtraLongName() {
     return <a className="foobar">Hey</a>
   },
   render() {
@@ -16,7 +16,7 @@ export default React.createClass({
       <div
         className="container"
         onClick={dep}
-        onBlur={this.renderOther}>
+        onBlur={this.renderOtherSuperDuperExtraFrickinExtraLongName}>
         <h1>Home</h1>
         <Link to="contact">Contact</Link>
         {this.props.children}
