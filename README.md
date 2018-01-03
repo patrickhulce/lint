@@ -5,3 +5,13 @@
 [![Dependencies](https://david-dm.org/patrickhulce/lint.svg)](https://david-dm.org/patrickhulce/lint)
 
 Lints JavaScript.
+
+## Usage
+
+```bash
+lint # lints default js+ts in src/lib/bin and test files
+lint --fix # lints, fixes, and prettifies default files
+lint --fix --no-prettify # lints and fixes default files
+lint -t react # lints jsx in src/lib/bin and test files
+lint -t typescript './stuff/**/*.ts' # lints ts in ./stuff
+```
