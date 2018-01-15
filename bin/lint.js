@@ -75,6 +75,10 @@ function prettifyIfNecessary(paths, options) {
 }
 
 function run(paths, options) {
+  if (options.type === 'typescript') {
+    return true
+  }
+
   prettifyIfNecessary(paths, options)
   const report = lint(paths, options)
   process.stdout.write(formatter(report.results))
