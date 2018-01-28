@@ -92,7 +92,9 @@ describe('bin/lint.js', () => {
   }
 
   context('node', () => {
-    before(done => setup('fixtures/node', ['--fix', '--write', '--ignore', '*-ignored.js'], done))
+    before(done =>
+      setup('fixtures/node', ['--fix', '--prettify', '--write', '--ignore', '*-ignored.js'], done)
+    )
     after(done => teardown(done, 'fixtures/node-actual'))
 
     describe('source linting', () => {
@@ -180,7 +182,7 @@ describe('bin/lint.js', () => {
       )
     }
 
-    before(done => setup('fixtures/node-overrides', [], beforeLint, done))
+    before(done => setup('fixtures/node-overrides', ['--prettify'], beforeLint, done))
     after(teardown)
 
     it('should still prettier lint', () => {
@@ -203,7 +205,7 @@ describe('bin/lint.js', () => {
   })
 
   context('react', () => {
-    before(done => setup('fixtures/react', ['-t', 'react', '--fix'], done))
+    before(done => setup('fixtures/react', ['-t', 'react', '--fix', '--prettify'], done))
     after(done => teardown(done, 'fixtures/react-actual'))
 
     describe('linting', () => {
