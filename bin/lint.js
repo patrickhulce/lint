@@ -15,9 +15,9 @@ const argv = yargs
     type: 'boolean',
   })
   .option('prettify', {
-    describe: 'prettifies files in place, only applies when --fix is used',
+    describe: 'prettifies files in place',
     type: 'boolean',
-    default: true,
+    default: false,
   })
   .option('type', {
     describe: 'type of code',
