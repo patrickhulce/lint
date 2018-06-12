@@ -5,8 +5,7 @@ cache:
 notifications:
   email: false
 node_js:
-  - v7
-  - v6
+  - v8
 script:
   - npm test
 after_success:
