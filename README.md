@@ -4,7 +4,7 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Dependencies](https://david-dm.org/patrickhulce/lint.svg)](https://david-dm.org/patrickhulce/lint)
 
-Lints JavaScript.
+Lints JavaScript and TypeScript.
 
 ## Usage
 
