@@ -13,7 +13,7 @@ const argv = yargs.usage('Usage: $0 [options]').option('fix', {
 function scanFor(file, maxDepth = 3) {
   let pathToFile = path.join(process.cwd(), file)
   while (pathToFile.length > file.length + 1 && !fs.existsSync(pathToFile) && maxDepth >= 0) {
-    const parentDir = path.dirname(path.dirname(pathToFile))
+    const parentDir = path.dirname(pathToFile.substr(0, pathToFile.length - file.length))
     pathToFile = path.join(parentDir, file)
     maxDepth--
   }
@@ -22,9 +22,21 @@ function scanFor(file, maxDepth = 3) {
 }
 
 const TSCONFIG_PATH = scanFor('tsconfig.json')
+const TSLINT_PATH = scanFor('node_modules/.bin/tslint')
+const ESLINT_PATH = scanFor('node_modules/.bin/eslint')
+const PRETTIER_PATH = scanFor('node_modules/.bin/prettier')
+const TSLINTRC_PATH = scanFor('tslint.json')
 const ESLINTRC_PATH = scanFor('.eslintrc')
 
-if (!TSCONFIG_PATH && !ESLINTRC_PATH) {
+if (!TSLINT_PATH && !ESLINT_PATH) {
+  throw new Error('Must have either eslint or tslint installed')
+}
+
+if (!PRETTIER_PATH) {
+  throw new Error('Must have prettier installed')
+}
+
+if (!TSLINTRC_PATH && !ESLINTRC_PATH) {
   throw new Error('Must have either eslint or tslint config')
 }
 
@@ -42,9 +54,10 @@ const directories = `{packages/*/,./}{src/**/,lib/**/,bin/**/,test/**/,}`
 
 const lintFixArg = argv.fix ? '--fix' : ''
 const lintCommand = TSCONFIG_PATH
-  ? `tslint --project . -c ${TSCONFIG_PATH}`
-  : `eslint -c ${ESLINTRC_PATH} '${directories}*.js'`
+  ? `${TSLINT_PATH} --project . -c ${TSLINTRC_PATH}`
+  : `${ESLINT_PATH} -c ${ESLINTRC_PATH} '${directories}*.js'`
 const lintPassed = exec(`${lintCommand} ${lintFixArg}`)
 const prettierFixArg = argv.fix ? '--write' : '--list-different'
-const prettierPassed = exec(`prettier ${prettierFixArg} '${directories}*.{ts,css,scss,md}'`)
+const prettierFiles = `${directories}*.{ts,css,scss,md,json}`
+const prettierPassed = exec(`${PRETTIER_PATH} ${prettierFixArg} '${prettierFiles}'`)
 process.exit(lintPassed && prettierPassed ? 0 : 1)
