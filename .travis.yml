@@ -6,7 +6,9 @@ notifications:
   email: false
 node_js:
   - v8
+before_install:
+  - npm install -g @patrickhulce/scripts
 script:
   - npm test
 after_success:
-  - npm run semantic-release
+  - hulk npm-publish --yes

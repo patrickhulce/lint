@@ -10,9 +10,7 @@
       "rm -fR test/fixtures/react-expected && mv test/fixtures/react-actual test/fixtures/react-expected",
     "test": "npm run test:unit && npm run test:lint",
     "test:unit": "mocha --timeout 10000 --reporter spec --require test/bootstrap test/lint.test.js",
-    "test:lint": "./bin/lint.js",
-    "semantic-release":
-      "semantic-release pre && npm publish --access public && semantic-release post"
+    "test:lint": "./bin/lint.js"
   },
   "bin": {
     "lint": "./bin/lint.js"
@@ -44,7 +42,6 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "ncp": "^2.0.0",
-    "semantic-release": "^6.3.2",
     "tmp": "^0.0.31",
     "webpack": "^2.3.2"
   }
