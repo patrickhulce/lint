@@ -24,10 +24,10 @@ function exec(command) {
   }
 }
 
-const directories = `?(packages/*/){src/**/,lib/**/,bin/**/,test/**/,./}`
+const directories = `{packages/*/,./}{src/**/,lib/**/,bin/**/,test/**/,}`
 
 const lintFixArg = argv.fix ? '--fix' : ''
-const lintCommand = IS_TYPESCRIPT ? `tslint --project .` : `eslint ${directories}*.js`
+const lintCommand = IS_TYPESCRIPT ? `tslint --project .` : `eslint '${directories}*.js'`
 const lintPassed = exec(`${lintCommand} ${lintFixArg}`)
 const prettierFixArg = argv.fix ? '--write' : '--list-different'
 const prettierPassed = exec(`prettier ${prettierFixArg} '${directories}*.{ts,css,scss,md}'`)
