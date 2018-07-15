@@ -4,12 +4,15 @@
   "description": "Lints JavaScript.",
   "main": "./lib/lint.js",
   "scripts": {
-    "update-node-expectations": "rm -fR test/fixtures/node-expected && mv test/fixtures/node-actual test/fixtures/node-expected",
-    "update-react-expectations": "rm -fR test/fixtures/react-expected && mv test/fixtures/react-actual test/fixtures/react-expected",
+    "update-node-expectations":
+      "rm -fR test/fixtures/node-expected && mv test/fixtures/node-actual test/fixtures/node-expected",
+    "update-react-expectations":
+      "rm -fR test/fixtures/react-expected && mv test/fixtures/react-actual test/fixtures/react-expected",
     "test": "npm run test:unit && npm run test:lint",
     "test:unit": "mocha --timeout 10000 --reporter spec --require test/bootstrap test/lint.test.js",
     "test:lint": "./bin/lint.js",
-    "semantic-release": "semantic-release pre && npm publish --access public && semantic-release post"
+    "semantic-release":
+      "semantic-release pre && npm publish --access public && semantic-release post"
   },
   "bin": {
     "lint": "./bin/lint.js"
@@ -24,28 +27,18 @@
     "url": "https://github.com/patrickhulce/lint/issues"
   },
   "homepage": "https://github.com/patrickhulce/lint#readme",
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "dependencies": {
     "babel-eslint": "^7.2.1",
     "debug": "^2.6.3",
     "eslint": "^3.19.0",
     "eslint-formatter-pretty": "^1.1.0",
-    "eslint-import-resolver-webpack": "^0.8.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^6.10.3",
-    "eslint-plugin-unicorn": "^2.1.1",
     "lodash": "^4.17.4",
     "prettier": "^1.9.2",
     "yargs": "^7.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "cz-conventional-changelog": "^2.0.0",
     "execa": "^0.6.3",
     "glob": "^7.1.1",
     "istanbul": "^0.4.5",
