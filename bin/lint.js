@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const fs = require('fs')
 const yargs = require('yargs')
 const execSync = require('child_process').execSync
 
@@ -7,6 +8,11 @@ const argv = yargs.usage('Usage: $0 [options]').option('fix', {
   describe: 'auto-fix problems',
   type: 'boolean',
 }).argv
+
+const IS_TYPESCRIPT =
+  fs.existsSync('tsconfig.json') ||
+  fs.existsSync('../tsconfig.json') ||
+  fs.existsSync('../../tsconfig.json')
 
 function exec(command) {
   try {
@@ -18,8 +24,11 @@ function exec(command) {
   }
 }
 
+const directories = `?(packages/*/){src/**/,lib/**/,bin/**/,test/**/,./}`
+
 const lintFixArg = argv.fix ? '--fix' : ''
-const lintPassed = exec(`eslint ${lintFixArg} .`)
+const lintCommand = IS_TYPESCRIPT ? `tslint --project .` : `eslint ${directories}*.js`
+const lintPassed = exec(`${lintCommand} ${lintFixArg}`)
 const prettierFixArg = argv.fix ? '--write' : '--list-different'
-const prettierPassed = exec(`prettier ${prettierFixArg} '**/*.{ts,css,scss,md}'`)
+const prettierPassed = exec(`prettier ${prettierFixArg} '${directories}*.{ts,css,scss,md}'`)
 process.exit(lintPassed && prettierPassed ? 0 : 1)
